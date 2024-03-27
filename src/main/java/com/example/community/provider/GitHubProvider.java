@@ -29,7 +29,7 @@ public class GitHubProvider {
             if (res.length > 1) {
                 String[] token = res[0].split("=");
                 if (token.length > 1) {
-                    return token[1];
+                    return token[1].replace("\n", "").replace("\r", "").replace("\r\n", "");
                 }
             }
         } catch (IOException e) {

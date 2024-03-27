@@ -5,34 +5,34 @@ package com.example.community.dto;
  */
 public class AccessTokenDto {
 
-    private String clientId;
-    private String clientSecret;
+    private String client_id;
+    private String client_secret;
     private String code;
-    private String redirectUri;
+    private String redirect_uri;
     private String state;
 
-    public String getClientId() {
-        return clientId;
+    public String getClient_id() {
+        return client_id;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setClient_id(String client_id) {
+        this.client_id = client_id;
     }
 
-    public String getClientSecret() {
-        return clientSecret;
+    public String getClient_secret() {
+        return client_secret;
     }
 
-    public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
+    public void setClient_secret(String client_secret) {
+        this.client_secret = client_secret;
     }
 
-    public String getRedirectUri() {
-        return redirectUri;
+    public String getRedirect_uri() {
+        return redirect_uri;
     }
 
-    public void setRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
+    public void setRedirect_uri(String redirect_uri) {
+        this.redirect_uri = redirect_uri;
     }
 
     public String getCode() {
