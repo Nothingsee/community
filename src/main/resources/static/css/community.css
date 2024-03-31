@@ -1,0 +1,23 @@
+body {
+    background-color: #e2e2e2;
+}
+.publish {
+    margin: 50px 100px;
+    background-color: white;
+}
+.publish-line {
+    border-right:1px solid #e2e2e2;
+}
+.btn-publish {
+    float: right;
+    margin-bottom: 20px;
+}
+.media-object {
+    width: 55px;
+    height: 40px;
+}
+.test-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}

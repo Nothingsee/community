@@ -8,7 +8,6 @@ import com.example.community.model.User;
 import com.example.community.provider.GitHubProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -51,16 +50,20 @@ public class AuthorizeController {
         String accessToken = gitHubProvider.getAccessToken(accessTokenDto);
         GithubUser githubUser = gitHubProvider.getGithubUser(accessToken);
         if (githubUser != null) {
-            System.out.println(JSON.toJSONString(githubUser));
-            User user = new User();
-            user.setToken(UUID.randomUUID().toString());
-            user.setName(githubUser.getName());
-            user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+            User user = userMapper.findUserByName(githubUser.getName());
+            if (user == null) {
+                System.out.println(JSON.toJSONString(githubUser));
+                user = new User();
+                user.setToken(UUID.randomUUID().toString());
+                user.setName(githubUser.getName());
+                user.setAccountId(String.valueOf(githubUser.getId()));
+                user.setGmtCreate(System.currentTimeMillis());
+                user.setGmtModified(user.getGmtCreate());
+                user.setAvatarUrl(githubUser.getAvatar_url());
+                userMapper.insert(user);
+            }
             response.addCookie(new Cookie("githubUserToken", user.getToken()));
-            request.getSession().setAttribute("user", githubUser);
+            request.getSession().setAttribute("user", user);
             response.sendRedirect("/");
         } else {
             response.sendRedirect("/");

@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>你好！社区</title>
+    <title>文章发布</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/community.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}"/>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
@@ -23,9 +23,6 @@
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown" th:if="${session.user != null}">
-                    <a th:href="@{/publish}" class="btn btn-info btn-sm active"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发 布</button></a>
-                </li>
                 <li th:if="${session.user == null}">
                     <a href="https://github.com/login/oauth/authorize?client_id=965002e0be0dec3080ef&redirect_uri=http://localhost:8887/callback&scope=user&state=1">Log In</a>
                 </li>
@@ -42,24 +39,29 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
 <div class="container-fluid publish">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 publish-line">
-            <h3><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 发现</h3>
+            <h3><span class="glyphicon glyphicon-send" aria-hidden="true"></span> 发布</h3>
             <hr/>
-            <div class="media"  th:each="article : ${articles}">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-rounded" th:src="${article.user.avatarUrl}">
-                    </a>
+            <form th:action="@{/publish/article}" th:method="post">
+                <div class="form-group">
+                    <label for="title">问题标题（简单扼要）：</label>
+                    <input type="title" th:value="${title}" name="title" class="form-control" id="title" placeholder="问题标题......">
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading" th:text="${article.title}"></h4>
-                    <span th:text="${#strings.abbreviate(article.description, 18)}"></span>
-                    <span class="test-desc">[[${article.commentCount}]]  个回复 · [[${article.viewCount}]] 次浏览 ·  [[${#dates.format(article.gmtCreate, 'dd MMMM yyyy')}]]</span>
+
+                <div class="form-group">
+                    <label for="description">问题补充（必填，请参照右侧提示）：</label>
+                    <textarea name="description" th:text="${description}" id="description" class="form-control" rows="10"></textarea>
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <label for="tag">添加标签：</label>
+                    <input type="tag" name="tag" th:value="${tag}" class="form-control" id="tag" placeholder="输入标签，以 , 号分隔">
+                </div>
+
+                <button type="submit" class="btn btn-success btn-primary btn-publish">发布</button>
+            </form>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12">
             <div>
@@ -73,6 +75,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
