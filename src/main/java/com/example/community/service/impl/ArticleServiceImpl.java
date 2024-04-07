@@ -1,6 +1,7 @@
 package com.example.community.service.impl;
 
 import com.example.community.dto.ArticleDto;
+import com.example.community.dto.PaginationArticleDto;
 import com.example.community.mapper.ArticleMapper;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.Article;
@@ -12,7 +13,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -25,10 +25,18 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
 
     @Override
-    public List<ArticleDto> findArticleList() {
-        List<Article> articles = articleMapper.topArticle(10);
+    public PaginationArticleDto findArticleList(int page, int pageSize) {
+        if (page < 1) {
+            page = 1;
+        }
+        int articleCount = articleMapper.count();
+        if (pageSize > articleCount) {
+            pageSize = articleCount;
+        }
+        int offset = (page -1) * pageSize;
+        List<Article> articles = articleMapper.list(offset, pageSize);
         if (CollectionUtils.isEmpty(articles)) {
-            return new ArrayList<>();
+            return new PaginationArticleDto();
         }
         List<ArticleDto> articleDtos = new ArrayList<>();
         articles.forEach(article -> {
@@ -38,6 +46,11 @@ public class ArticleServiceImpl implements ArticleService {
             articleDto.setUser(user);
             articleDtos.add(articleDto);
         });
-        return articleDtos;
+        PaginationArticleDto paginationArticleDto = new PaginationArticleDto();
+        paginationArticleDto.setArticles(articleDtos);
+        //计算页码
+        int pageCount = articleCount % pageSize == 0 ? articleCount / pageSize : articleCount / pageSize + 1;
+        paginationArticleDto.setPagination(pageCount, page, pageSize);
+        return paginationArticleDto;
     }
 }

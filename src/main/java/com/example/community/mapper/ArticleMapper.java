@@ -15,9 +15,12 @@ public interface ArticleMapper {
             "values (#{title},#{description},#{gmtCreate},#{gmtModified},#{userId},#{tag})")
     void insert(Article article);
 
-    @Select("select * from sys_article")
-    List<Article> list();
+    @Select("select * from sys_article limit #{offset},#{pageSize}")
+    List<Article> list(@Param("offset") int offset, @Param(("pageSize")) int pageSize);
 
     @Select("select * from sys_article order by gmt_modified desc limit #{count}")
     List<Article> topArticle(@Param("count") int count);
+
+    @Select("select count(1) from sys_article")
+    int count();
 }
